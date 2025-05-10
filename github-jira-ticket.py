@@ -1,19 +1,17 @@
-import os
-from dotenv import load_dotenv
 import requests
 from requests.auth import HTTPBasicAuth
 import json
 from flask import Flask, request
 
 app = Flask(__name__)
-load_dotenv()  # Load from .env file
 
 @app.route('/createJira', methods=['POST'])
 def createJira():
     url = "https://arijitchakraborty691.atlassian.net/rest/api/3/issue"
 
-    API_Token = os.getenv("JIRA_API_TOKEN")
-    JIRA_Email = os.getenv("JIRA_USER_EMAIL")
+    # Your Jira API token and email (you can later move to .env)
+    API_Token = ""
+    JIRA_Email = "arijitchakraborty691@gmail.com"
 
     auth = HTTPBasicAuth(JIRA_Email, API_Token)
 
