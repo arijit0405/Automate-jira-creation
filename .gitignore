@@ -1,0 +1,10 @@
+# Ignore environment file with sensitive info
+.env
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Flask debug files
+instance/
+*.log
