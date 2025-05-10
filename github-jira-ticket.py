@@ -1,21 +1,21 @@
 import os
-import json
-import requests
-from flask import Flask
-from requests.auth import HTTPBasicAuth
 from dotenv import load_dotenv
-
-load_dotenv()
+import requests
+from requests.auth import HTTPBasicAuth
+import json
+from flask import Flask, request
 
 app = Flask(__name__)
+load_dotenv()  # Load from .env file
 
 @app.route('/createJira', methods=['POST'])
 def createJira():
     url = "https://arijitchakraborty691.atlassian.net/rest/api/3/issue"
 
-    JIRA_USER = os.getenv("JIRA_USER")
     API_Token = os.getenv("JIRA_API_TOKEN")
-    auth = HTTPBasicAuth(JIRA_USER, API_Token)
+    JIRA_Email = os.getenv("JIRA_USER_EMAIL")
+
+    auth = HTTPBasicAuth(JIRA_Email, API_Token)
 
     headers = {
         "Accept": "application/json",
@@ -24,31 +24,35 @@ def createJira():
 
     payload = json.dumps({
         "fields": {
-            "project": {
-                "key": "AR"
-            },
-            "summary": "First Jira Ticket Creation",
             "description": {
+                "content": [
+                    {
+                        "content": [
+                            {
+                                "text": "My First Jira Ticket",
+                                "type": "text"
+                            }
+                        ],
+                        "type": "paragraph"
+                    }
+                ],
                 "type": "doc",
-                "version": 1,
-                "content": [{
-                    "type": "paragraph",
-                    "content": [{
-                        "type": "text",
-                        "text": "My First Jira Ticket"
-                    }]
-                }]
+                "version": 1
             },
             "issuetype": {
                 "id": "10011"
-            }
+            },
+            "project": {
+                "key": "AR"
+            },
+            "summary": "First Jira Ticket Creation"
         }
     })
 
     response = requests.post(
         url,
-        headers=headers,
         data=payload,
+        headers=headers,
         auth=auth
     )
 
